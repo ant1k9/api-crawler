@@ -1,0 +1,31 @@
+crawlers:
+  - name: my endpoint
+    type: <type>
+    link: <endpoint>
+    method: post
+    payload: '{"page": <PAGE>}'
+    paginator:
+      key: <PAGE>
+      start: 1
+      end: 10
+      type: numeric
+      sleep:
+        min: 1s
+        max: 5s
+    iterator:
+      collection_path: '.data.collection'
+      identificator_path: '.id'
+      type: json
+    headers:
+      - key: content-type
+        value: application/json
+      - key: cookie
+        value: <your-cookie>
+
+database:
+  host: 127.0.0.1
+  port: 5432
+  name: api-crawler
+  user: api-crawler-user
+  password: api-crawler-user-password
+  sslmode: disable
