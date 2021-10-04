@@ -2,6 +2,8 @@ package config
 
 import (
 	"io/ioutil"
+	"net/http"
+	"strings"
 
 	"github.com/ant1k9/api-crawler/internal/pkg/log"
 	"gopkg.in/yaml.v3"
@@ -48,6 +50,7 @@ type (
 
 	Iterator struct {
 		Type              string `yaml:"type"`
+		Regexp            string `yaml:"regex"`
 		CollectionPath    string `yaml:"collection_path"`
 		IdentificatorPath string `yaml:"identificator_path"`
 	}
@@ -59,6 +62,15 @@ type (
 )
 
 var Config Yaml2Go
+
+func (c *Crawler) GetPaginatorOrigin() string {
+	switch strings.ToUpper(c.Method) {
+	case http.MethodPost:
+		return c.Payload
+	default:
+		return c.Link
+	}
+}
 
 func init() {
 	config, err := ioutil.ReadFile("config.yml")

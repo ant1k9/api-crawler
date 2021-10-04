@@ -2,6 +2,7 @@ package crawler
 
 import (
 	"errors"
+	"fmt"
 	"io/ioutil"
 	"math/rand"
 	"net/http"
@@ -63,8 +64,10 @@ func New(cfg config.Crawler, store db.Store) (Crawler, error) {
 }
 
 func (c *crawler) Crawl() error {
+	origin := c.cfg.GetPaginatorOrigin()
+
 	getNextPage := c.paginator.NextPage
-	for next, err := getNextPage(c.cfg.Payload); ; next, err = getNextPage(c.cfg.Payload) {
+	for next, err := getNextPage(origin); ; next, err = getNextPage(origin) {
 		if err != nil {
 			return handlePaginatorErr(err)
 		}
@@ -77,7 +80,8 @@ func (c *crawler) Crawl() error {
 
 		items, err := c.iterator.GetCollection(string(data))
 		if err != nil {
-			return err
+			log.Info(fmt.Sprintf("cannot get items from data for page %s", next))
+			continue
 		}
 
 		for _, item := range items {
@@ -91,26 +95,37 @@ func (c *crawler) Crawl() error {
 }
 
 func (c *crawler) getData(next string) ([]byte, error) {
-	switch c.cfg.Method {
-	case "post":
+	var (
+		req *http.Request
+		err error
+	)
+
+	switch strings.ToUpper(c.cfg.Method) {
+	case http.MethodPost:
 		reader := strings.NewReader(next)
-		req, err := http.NewRequest(http.MethodPost, c.cfg.Link, reader)
+		req, err = http.NewRequest(http.MethodPost, c.cfg.Link, reader)
 		if err != nil {
 			return nil, err
-		}
-		for _, header := range c.cfg.Headers {
-			req.Header.Add(header.Key, header.Value)
 		}
 
-		resp, err := http.DefaultClient.Do(req)
+	case http.MethodGet:
+		req, err = http.NewRequest(http.MethodGet, next, nil)
 		if err != nil {
 			return nil, err
 		}
-		return ioutil.ReadAll(resp.Body)
 
 	default:
-		return nil, errors.New("TODO: add get method, currently not implemented")
+		return nil, errors.New("only get and post methods are implemented")
 	}
+
+	for _, header := range c.cfg.Headers {
+		req.Header.Add(header.Key, header.Value)
+	}
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		return nil, err
+	}
+	return ioutil.ReadAll(resp.Body)
 }
 
 func (c *crawler) sleep() {
