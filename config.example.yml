@@ -1,5 +1,6 @@
 crawlers:
   - name: my endpoint
+    on_error: exit
     type: <type>
     link: <endpoint>
     method: post

@@ -17,6 +17,7 @@ type (
 
 	Crawler struct {
 		Name      string    `yaml:"name"`
+		OnError   string    `yaml:"on_error"`
 		Type      string    `yaml:"type"`
 		Method    string    `yaml:"method"`
 		Link      string    `yaml:"link"`

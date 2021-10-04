@@ -81,7 +81,9 @@ func (c *crawler) Crawl() error {
 		items, err := c.iterator.GetCollection(string(data))
 		if err != nil {
 			log.Info(fmt.Sprintf("cannot get items from data for page %s", next))
-			continue
+			if c.cfg.OnError == "exit" {
+				return err
+			}
 		}
 
 		for _, item := range items {

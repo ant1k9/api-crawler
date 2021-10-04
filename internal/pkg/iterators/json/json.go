@@ -45,6 +45,7 @@ func (i *iterator) GetCollection(payload string) (items []dto.Item, err error) {
 			if len(m) < 2 {
 				return nil, errors.New("improper regex for id")
 			}
+
 			id, err = strconv.ParseInt(m[1], 10, 64)
 			if err != nil {
 				return nil, err
