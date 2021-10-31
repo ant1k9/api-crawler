@@ -1,12 +1,18 @@
 module github.com/ant1k9/api-crawler
 
-go 1.16
+go 1.17
 
 require (
 	github.com/jmoiron/sqlx v1.3.4
 	github.com/lib/pq v1.10.3
 	github.com/spf13/cobra v1.2.1
-	github.com/spf13/viper v1.8.1
-	github.com/tidwall/gjson v1.9.1
+	github.com/tidwall/gjson v1.11.0
 	gopkg.in/yaml.v3 v3.0.0-20210107192922-496545a6307b
+)
+
+require (
+	github.com/inconshreveable/mousetrap v1.0.0 // indirect
+	github.com/spf13/pflag v1.0.5 // indirect
+	github.com/tidwall/match v1.1.1 // indirect
+	github.com/tidwall/pretty v1.2.0 // indirect
 )
