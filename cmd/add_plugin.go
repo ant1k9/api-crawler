@@ -3,7 +3,6 @@ package cmd
 import (
 	"errors"
 
-	"github.com/ant1k9/api-crawler/config"
 	"github.com/ant1k9/api-crawler/internal/pkg/db"
 	"github.com/ant1k9/api-crawler/internal/pkg/log"
 	"github.com/spf13/cobra"
@@ -17,7 +16,7 @@ var addPlugin = &cobra.Command{
 			log.FatalIfErr(errors.New("provide only one argument to the command"))
 		}
 
-		db, err := db.New(config.Config.Database)
+		db, err := db.New(cfg.Database)
 		log.FatalIfErr(err)
 		log.FatalIfErr(db.CreatePartition(args[0]))
 	},

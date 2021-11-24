@@ -1,3 +1,6 @@
+![CI](https://github.com/ant1k9/api-crawler/workflows/test/badge.svg)
+[![codecov](https://codecov.io/gh/ant1k9/api-crawler/branch/main/graph/badge.svg)](https://codecov.io/gh/ant1k9/api-crawler)
+
 ### Api-Crawler
 
 Crawl your sites with the given configuration

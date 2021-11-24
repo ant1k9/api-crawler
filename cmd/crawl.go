@@ -19,14 +19,14 @@ var crawl = &cobra.Command{
 		}
 
 		var crawlerConfig config.Crawler
-		for _, cfg := range config.Config.Crawlers {
+		for _, cfg := range cfg.Crawlers {
 			if cfg.Type == args[0] {
 				crawlerConfig = cfg
 				break
 			}
 		}
 
-		db, err := db.New(config.Config.Database)
+		db, err := db.New(cfg.Database)
 		log.FatalIfErr(err)
 		cr, err := crawler.New(crawlerConfig, db)
 		log.FatalIfErr(err)

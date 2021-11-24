@@ -10,7 +10,7 @@ import (
 )
 
 type (
-	Yaml2Go struct {
+	Config struct {
 		Crawlers []Crawler `yaml:"crawlers"`
 		Database Database  `yaml:"database"`
 	}
@@ -62,8 +62,6 @@ type (
 	}
 )
 
-var Config Yaml2Go
-
 func (c *Crawler) GetPaginatorOrigin() string {
 	switch strings.ToUpper(c.Method) {
 	case http.MethodPost:
@@ -73,8 +71,9 @@ func (c *Crawler) GetPaginatorOrigin() string {
 	}
 }
 
-func init() {
+func Init() (cfg Config) {
 	config, err := ioutil.ReadFile("config.yml")
 	log.FatalIfErr(err)
-	log.FatalIfErr(yaml.Unmarshal(config, &Config))
+	log.FatalIfErr(yaml.Unmarshal(config, &cfg))
+	return cfg
 }
