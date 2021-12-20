@@ -37,11 +37,12 @@ type (
 	}
 
 	Paginator struct {
-		Start int    `yaml:"start"`
-		End   int    `yaml:"end"`
-		Type  string `yaml:"type"`
-		Sleep Sleep  `yaml:"sleep"`
-		Key   string `yaml:"key"`
+		Start int      `yaml:"start"`
+		End   int      `yaml:"end"`
+		Type  string   `yaml:"type"`
+		Sleep Sleep    `yaml:"sleep"`
+		Key   string   `yaml:"key"`
+		Items []string `yaml:"items"`
 	}
 
 	Sleep struct {
@@ -54,6 +55,7 @@ type (
 		Regexp            string `yaml:"regex"`
 		CollectionPath    string `yaml:"collection_path"`
 		IdentificatorPath string `yaml:"identificator_path"`
+		Separator         string `yaml:"separator"`
 	}
 
 	Header struct {

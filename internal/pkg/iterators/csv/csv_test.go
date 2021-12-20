@@ -1,4 +1,4 @@
-package json
+package csv
 
 import (
 	"reflect"
@@ -17,29 +17,40 @@ func Test_iterator_GetCollection(t *testing.T) {
 	}{
 		{
 			name: "get items",
-			payload: `{"items": [
-				{"id": "abc-123", "other": 200}
-			]}`,
+			payload: `id,other
+123,abc
+345,cde`,
 			wantItems: []dto.Item{
 				{
 					ID:      123,
 					Plugin:  "some-type",
-					Payload: `{"id": "abc-123", "other": 200}`,
+					Payload: `{"id":"123","other":"abc"}`,
+				},
+				{
+					ID:      345,
+					Plugin:  "some-type",
+					Payload: `{"id":"345","other":"cde"}`,
 				},
 			},
 		},
 		{
+			name: "incorrect identificator path",
+			payload: `idx,other
+123,abc
+345,cde`,
+			wantErr: true,
+		},
+		{
 			name:    "no items",
-			payload: `{"items": null}`,
+			payload: ``,
 			wantErr: true,
 		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			i := New(
 				config.Iterator{
-					Regexp:            `\w+-(\d+)`,
-					CollectionPath:    "items",
 					IdentificatorPath: "id",
 				},
 				"some-type",

@@ -86,6 +86,12 @@ func (c *crawler) Crawl() error {
 			}
 		}
 
+		if adjuster, ok := c.paginator.(paginator.PluginAdjuster); ok {
+			for i := range items {
+				items[i].Plugin = adjuster.AdjustPlugin(items[i].Plugin)
+			}
+		}
+
 		for _, item := range items {
 			err = c.store.InsertItem(item)
 			if err != nil {
