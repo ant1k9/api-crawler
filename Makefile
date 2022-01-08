@@ -8,3 +8,10 @@ test:
 
 cov-html:
 	go tool cover -html=coverage.txt
+
+dump:
+
+load: load-shares
+
+load-shares:
+	go run main.go crawl share
