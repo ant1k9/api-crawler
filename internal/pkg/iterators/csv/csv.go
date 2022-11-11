@@ -58,7 +58,11 @@ func (i *iterator) GetCollection(payload string) (items []dto.Item, err error) {
 			raw[values[0][idx]] = v
 		}
 
-		payload, _ := json.Marshal(raw)
+		payload, err := json.Marshal(raw)
+		if err != nil {
+			return nil, err
+		}
+
 		items = append(items, dto.Item{
 			ID:      id,
 			Plugin:  i.itemType,
