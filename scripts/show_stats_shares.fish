@@ -10,7 +10,6 @@ function show_graph
         set _flag_width "200"
     end
 
-    echo "         [$_flag_id] $_flag_ticket"
     set -l query "
         SELECT value FROM (
             SELECT
@@ -22,7 +21,14 @@ function show_graph
         ) _
         ORDER BY ts ASC"
 
-    psql $DATABASE_URL -qXAt -c "$query" | asciigraph -w "$_flag_width" -h "$_flag_height"
+    if test "$UTOOL_ENABLED" = "true"
+        psql $DATABASE_URL -qXAt -c "$query" \
+            | uplot lineplot -t "[$_flag_id] $_flag_ticket" -w 80 -h "$_flag_height" 2>&1
+    else
+        echo "         [$_flag_id] $_flag_ticket"
+        psql $DATABASE_URL -qXAt -c "$query" \
+            | asciigraph -w "$_flag_width" -h "$_flag_height"
+    end
     echo
 end
 
