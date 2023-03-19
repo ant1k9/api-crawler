@@ -16,7 +16,7 @@ function show_graph
             SELECT
                 payload->>'<CLOSE>' AS value,
                 payload->>'<DATE>' AS ts
-            FROM data_share_$_flag_id
+            FROM data_shares_$_flag_id
             ORDER BY payload->>'<DATE>' DESC
             LIMIT 90
         ) _
@@ -48,7 +48,7 @@ function trending_query
     end
 
     echo "
-    WITH share_stats AS (
+    WITH shares_stats AS (
         SELECT
             plugin,
             (payload->>'<CLOSE>')::DECIMAL AS value,
@@ -60,15 +60,15 @@ function trending_query
             id,
             name,
             ticket,
-            'share_' || id AS plugin
+            'shares_' || id AS plugin
         FROM shares_mapping
     )
 
     SELECT
         sm.id, sm.name
     FROM shares_mapping_with_plugin sm
-    INNER JOIN share_stats sh1 USING (plugin)
-    INNER JOIN share_stats sh2 USING (plugin)
+    INNER JOIN shares_stats sh1 USING (plugin)
+    INNER JOIN shares_stats sh2 USING (plugin)
     WHERE
         sh1.rn = 1 AND sh2.rn = $_flag_days
     ORDER BY $_flag_order_by LIMIT $_flag_top"
