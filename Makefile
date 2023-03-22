@@ -14,12 +14,12 @@ cov-html:
 
 .PHONY: backup
 backup:
-	@pg_dump --data-only -d "$$DATABASE_URL" > "${DB_BACKUP_PATH}"
+	@pg_dump -Fc -d "$$DATABASE_URL" > "${DB_BACKUP_PATH}"
 	@zip "${DB_BACKUP_ARCHIVE}" "${DB_BACKUP_PATH}" &>/dev/null
 	@rm "${DB_BACKUP_PATH}"
 	@echo "${DB_BACKUP_ARCHIVE}"
 
 load: load-shares
 
-load-shares:
-	go run main.go crawl share
+load-shares: build
+	./bin/crawler crawl shares
