@@ -1,3 +1,6 @@
+DB_BACKUP_PATH=/tmp/$(shell date +'%Y%m%d_%H%M%S').dump
+DB_BACKUP_ARCHIVE=${DB_BACKUP_PATH}.zip
+
 all: build
 
 build:
@@ -9,7 +12,12 @@ test:
 cov-html:
 	go tool cover -html=coverage.txt
 
-dump:
+.PHONY: backup
+backup:
+	@pg_dump --data-only -d "$$DATABASE_URL" > "${DB_BACKUP_PATH}"
+	@zip "${DB_BACKUP_ARCHIVE}" "${DB_BACKUP_PATH}" &>/dev/null
+	@rm "${DB_BACKUP_PATH}"
+	@echo "${DB_BACKUP_ARCHIVE}"
 
 load: load-shares
 
