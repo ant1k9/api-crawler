@@ -4,6 +4,7 @@ DB_BACKUP_ARCHIVE=${DB_BACKUP_PATH}.zip
 all: build
 
 build:
+	go mod tidy
 	go build -o bin/crawler main.go
 
 test:
